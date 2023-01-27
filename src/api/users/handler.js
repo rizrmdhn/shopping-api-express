@@ -3,12 +3,17 @@ const { nanoid } = require('nanoid');
 
 const users = require('../../utils/users');
 
+const validator = require('../../validator/users');
 
-exports.addUsers = (req, res) => {
 
-    const id = nanoid(16);
+exports.addUsers = async (req, res) => {
+
+    validator.validateUserPayload(req.body, res)
+
+    const id = `users-${nanoid(16)}`;
 
     const { name, email, password } = req.body;
+
 
     const checkUser = users.find((user) => user.email === email);
 
@@ -30,7 +35,7 @@ exports.addUsers = (req, res) => {
         })
     }
 
-    const userId = id;
+    const userId = users[index].id;
 
     return res.status(201).json({
         status: 'success',
