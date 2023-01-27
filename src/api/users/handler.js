@@ -10,12 +10,21 @@ exports.addUsers = (req, res) => {
 
     const { name, email, password } = req.body;
 
+    const checkUser = users.find((user) => user.email === email);
+
+    if (checkUser) {
+        return res.status(400).json({
+            status: 'failed',
+            message: 'Email already exists',
+        });
+    };
+
     users.push({ id, name, email, password });
 
     const index = users.findIndex((user) => user.id === id);
 
     if (index === -1) {
-        res.status(400).res.json({
+        return res.status(400).res.json({
             status: 'failed',
             message: 'User not added',
         })
@@ -23,7 +32,7 @@ exports.addUsers = (req, res) => {
 
     const userId = id;
 
-    res.status(201).json({
+    return res.status(201).json({
         status: 'success',
         data: {
             userId,
