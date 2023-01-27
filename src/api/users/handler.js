@@ -3,12 +3,12 @@ const { nanoid } = require('nanoid');
 
 const users = require('../../utils/users');
 
-const validator = require('../../validator/users');
+// const validator = require('../../validator/users');
 
 
 exports.addUsers = async (req, res) => {
 
-    validator.validateUserPayload(req.body, res)
+    // validator.validateUserPayload(req.body, res)
 
     const id = `users-${nanoid(16)}`;
 

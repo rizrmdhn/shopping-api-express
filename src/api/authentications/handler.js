@@ -2,11 +2,11 @@
 const jwt = require('jsonwebtoken');
 const users = require('../../utils/users');
 
-const validator = require('../../validator/authentications');
+// const validator = require('../../validator/authentications');
 
 exports.postAuthentications = async (req, res) => {
 
-    validator.validatePostAuthenticationPayload(req.body, res);
+    // validator.validatePostAuthenticationPayload(req.body, res);
 
     const { email, password } = req.body;
 
@@ -55,13 +55,12 @@ exports.postAuthentications = async (req, res) => {
 
 exports.putAuthentications = async (req, res,) => {
 
-
-
     const { refreshToken } = req.body;
 
-    validator.validatePutAuthenticationPayload(req.body, res);
+    // validator.validatePutAuthenticationPayload(req.body, res);
 
     const index = users.findIndex((user) => user.refreshToken === refreshToken);
+
 
     if (index === -1) {
         return res.status(400).json({
@@ -95,7 +94,7 @@ exports.putAuthentications = async (req, res,) => {
 
 exports.deleteAuthentications = async (req, res) => {
 
-    validator.validateDeleteAuthenticationPayload(req.body, res);
+    // validator.validateDeleteAuthenticationPayload(req.body, res);
 
     const { refreshToken } = req.body;
 
