@@ -1,27 +1,18 @@
 /* eslint-disable radix */
 /* eslint-disable import/no-extraneous-dependencies */
-const axios = require('axios');
 
 const Item = require('../../utils/items');
 const users = require('../../utils/users');
 const userCart = require('../../utils/userCart');
 
 exports.getItems = async (req, res) => {
-    await axios.get('https://fakestoreapi.com/products').then((response) => {
-        const products = response.data;
-        Item.push(...products);
-        res.status(200).json({
-            status: 'success',
-            data: {
-                products,
-            },
-        });
-    }).catch((error) => {
-        res.status(400).json({
-            status: 'failed',
-            message: error.message,
-        });
-    });
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            products: Item,
+        },
+    })
 
 }
 

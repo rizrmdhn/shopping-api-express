@@ -6,12 +6,8 @@ const bcrypt = require('bcrypt');
 const users = require('../../utils/users');
 const userCart = require('../../utils/userCart');
 
-// const validator = require('../../validator/users');
-
 
 exports.addUsers = async (req, res) => {
-
-    // validator.validateUserPayload(req.body, res)
 
     const id = `users-${nanoid(16)}`;
 
