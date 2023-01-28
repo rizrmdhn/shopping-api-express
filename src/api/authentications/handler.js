@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const users = require('../../utils/users');
 
 // const validator = require('../../validator/authentications');
@@ -10,19 +11,24 @@ exports.postAuthentications = async (req, res) => {
 
     const { email, password } = req.body;
 
+
     const index = users.findIndex((user) => user.email === email);
 
     if (index === -1) {
         return res.status(400).json({
             status: 'failed',
-            message: 'Email not found',
+            message: 'User with this email not found',
         });
     }
 
-    if (users[index].password !== password) {
+    const { password: hashedPassword } = users[index];
+
+    const match = await bcrypt.compare(password, hashedPassword);
+
+    if (!match) {
         return res.status(400).json({
             status: 'failed',
-            message: 'Password not match',
+            message: 'Wrong password',
         });
     }
 
@@ -53,28 +59,19 @@ exports.postAuthentications = async (req, res) => {
     });
 }
 
-exports.putAuthentications = async (req, res,) => {
+exports.putAuthentications = async (req, res) => {
 
     const { refreshToken } = req.body;
 
     // validator.validatePutAuthenticationPayload(req.body, res);
 
-    const index = users.findIndex((user) => user.refreshToken === refreshToken);
-
-
-    if (index === -1) {
-        return res.status(400).json({
-            status: 'failed',
-            message: 'Refresh token not found',
-        });
-    }
 
     return jwt.verify(refreshToken, "yourRefreshTokenHere", (err, user) => {
 
         if (err) {
-            return res.status(403).json({
+            return res.status(400).json({
                 status: 'failed',
-                message: 'Token not valid',
+                message: 'You are not authorized',
             });
         }
 
@@ -97,6 +94,8 @@ exports.deleteAuthentications = async (req, res) => {
     // validator.validateDeleteAuthenticationPayload(req.body, res);
 
     const { refreshToken } = req.body;
+
+    this.putAuthentications(req, res);
 
     const index = users.findIndex((user) => user.refreshToken === refreshToken);
 
